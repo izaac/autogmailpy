@@ -8,6 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from homepage import HomePage
 from gmail_login import GmailLogin
+from helpers import config
 
 
 class GmailInbox(HomePage):
@@ -39,7 +40,7 @@ class GmailInbox(HomePage):
         self.driver.find_element(By.XPATH, "//td//img[2]")
         to_mail = self.driver.find_element(By.CLASS_NAME, "vO")
         to_mail.clear()
-        to_mail.send_keys('nstest739@gmail.com')
+        to_mail.send_keys(config['email'])
         subject = self.driver.find_element(By.CLASS_NAME, "aoT")
         subject.clear()
         subject.send_keys("Hi!")

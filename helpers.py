@@ -2,6 +2,11 @@ import os
 from functools import wraps
 import datetime
 
+config = dict(
+    email='nstest739@gmail.com',
+    passwd_key='some_passwd',
+)
+
 
 def screenshot_on_error(test):
 

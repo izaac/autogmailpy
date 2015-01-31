@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions as EC
 from homepage import HomePage
-
+from helpers import config
 
 class GmailLogin(HomePage):
 
@@ -24,7 +24,7 @@ class GmailLogin(HomePage):
         except NoSuchElementException as nsee:
             print('No Password Element Located {0}'.format(nsee))
 
-    def _fill_loginform_elements(self, email_keys='nstest739@gmail.com', passwd_keys='invalid_pass'):
+    def _fill_loginform_elements(self, email_keys=config['email'], passwd_keys='invalid_pass'):
         self.email.clear()
         self.email.send_keys(email_keys)
 
@@ -42,7 +42,7 @@ class GmailLogin(HomePage):
         if element:
             self._locate_loginform_elements()
 
-        self._fill_loginform_elements(passwd_keys='nstest739!')
+        self._fill_loginform_elements(passwd_keys=config['passwd_key'])
         self._click_loginform_login()
 
         try:
