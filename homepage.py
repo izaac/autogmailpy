@@ -1,4 +1,5 @@
 __author__ = 'Jorge'
+from selenium.webdriver.support import expected_conditions as EC
 
 
 class HomePage:
@@ -25,3 +26,6 @@ class HomePage:
     @wait.setter
     def wait(self, obj):
         self._wait = obj
+
+    def wait_for(self, element):
+        self.wait.until(EC.visibility_of(element))

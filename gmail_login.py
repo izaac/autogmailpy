@@ -2,7 +2,7 @@ import time
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.support import expected_conditions as EC
+
 from homepage import HomePage
 from helpers import config
 
@@ -15,14 +15,8 @@ class GmailLogin(HomePage):
         self.driver.base_url = 'https://gmail.com'
 
     def _locate_loginform_elements(self):
-        try:
-            self.email = self.driver.find_element(By.ID, 'Email')
-        except NoSuchElementException as nsee:
-            print('No Email Element Located {0}'.format(nsee))
-        try:
-            self.passwd = self.driver.find_element(By.ID, 'Passwd')
-        except NoSuchElementException as nsee:
-            print('No Password Element Located {0}'.format(nsee))
+        self.email = self.locate_email_field()
+        self.passwd = self.locate_passwd_field()
 
     def _fill_loginform_elements(self, email_keys=config['email'], passwd_keys='invalid_pass'):
         self.email.clear()
@@ -32,21 +26,19 @@ class GmailLogin(HomePage):
         self.passwd.send_keys(passwd_keys)
 
     def _click_loginform_login(self):
-        sign_in = self.driver.find_element(By.ID, 'signIn')
+        sign_in = self.locate_signin_button()
         sign_in.click()
 
     def login_valid(self):
 
-        element = self.wait.until(EC.visibility_of(self.driver.find_element(By.ID, 'signIn')))
-
-        if element:
-            self._locate_loginform_elements()
+        self.wait_for(self.locate_signin_button())
+        self._locate_loginform_elements()
 
         self._fill_loginform_elements(passwd_keys=config['passwd_key'])
         self._click_loginform_login()
 
         try:
-            self.wait.until(EC.visibility_of(self.driver.find_element(By.XPATH, "//div[@id=':36']")))
+            self.wait_for(self.locate_inbox_element())
         except NoSuchElementException as nsee:
             print('Couldnt locate element after valid login {0}'.format(nsee))
             inbox_present = False
@@ -57,15 +49,13 @@ class GmailLogin(HomePage):
 
     def login_invalid(self):
 
-        element = self.wait.until(EC.visibility_of(self.driver.find_element(By.ID, 'signIn')))
-        if element:
-            self._locate_loginform_elements()
+        self._locate_loginform_elements()
 
         self._fill_loginform_elements()
         self._click_loginform_login()
 
         try:
-            self.wait.until(EC.visibility_of(self.driver.find_element(By.ID, 'errormsg_0_Passwd')))
+            self.wait_for(self.locate_error_message())
         except NoSuchElementException as nsee:
             print('No error message was visible {0}'.format(nsee))
             error_present = False
@@ -74,6 +64,20 @@ class GmailLogin(HomePage):
 
         return error_present
 
+    def locate_signin_button(self):
+        return self.driver.find_element(By.ID, 'signIn')
+
+    def locate_email_field(self):
+        return self.driver.find_element(By.ID, 'Email')
+
+    def locate_passwd_field(self):
+        return self.driver.find_element(By.ID, 'Passwd')
+
+    def locate_inbox_element(self):
+        return self.driver.find_element(By.XPATH, "//div[@id=':36']")
+
+    def locate_error_message(self):
+        return self.driver.find_element(By.ID, 'errormsg_0_Passwd')
 
 if __name__ == '__main__':
     pass
