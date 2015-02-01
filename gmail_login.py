@@ -65,19 +65,19 @@ class GmailLogin(HomePage):
         return error_present
 
     def locate_signin_button(self):
-        return self.driver.find_element(By.ID, 'signIn')
+        return self.find_by(By.ID, 'signIn')
 
     def locate_email_field(self):
-        return self.driver.find_element(By.ID, 'Email')
+        return self.find_by(By.ID, 'Email')
 
     def locate_passwd_field(self):
-        return self.driver.find_element(By.ID, 'Passwd')
+        return self.find_by(By.ID, 'Passwd')
 
     def locate_inbox_link(self):
-        return self.driver.find_element(By.XPATH, "//a[contains(@title,'Inbox')]")
+        return self.find_by(By.XPATH, "//a[contains(@title,'Inbox')]")
 
     def locate_error_message(self):
-        return self.driver.find_element(By.ID, 'errormsg_0_Passwd')
+        return self.find_by(By.ID, 'errormsg_0_Passwd')
 
 if __name__ == '__main__':
     pass

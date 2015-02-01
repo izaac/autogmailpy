@@ -83,49 +83,48 @@ class GmailInbox(HomePage):
         self._body = obj
 
     def compose_frame_visible(self):
-        self.driver.find_element(By.XPATH, "//td//img[2]")
+        self.driver.find_by(By.XPATH, "//td//img[2]")
 
     def locate_send_button(self):
-        return self.driver.find_element(By.XPATH, "//div[text()='Send']")
+        return self.find_by(By.XPATH, "//div[text()='Send']")
 
     def locate_sent_message(self):
-        return self.driver.find_element(By.CLASS_NAME, 'vh')
+        return self.find_by(By.CLASS_NAME, 'vh')
 
     def locate_compose_subject(self):
-        return self.driver.find_element(By.CLASS_NAME, "aoT")
+        return self.find_by(By.CLASS_NAME, "aoT")
 
     def locate_compose_to(self):
-        return self.driver.find_element(By.CLASS_NAME, "vO")
+        return self.find_by(By.CLASS_NAME, "vO")
 
     def locate_inbox_link(self):
-        return self.driver.find_element(By.XPATH, "//a[contains(@title,'Inbox')]")
+        return self.find_by(By.XPATH, "//a[contains(@title,'Inbox')]")
 
     def locate_sent_link(self):
-        return self.driver.find_element(By.XPATH, "//a[contains(@title,'Sent Mail')]")
+        return self.find_by(By.XPATH, "//a[contains(@title,'Sent Mail')]")
 
     def locate_email_counter(self):
-        return self.driver.find_element(By.CLASS_NAME, "Dj")
+        return self.find_by(By.CLASS_NAME, "Dj")
 
     def locate_compose_button(self):
-        return self.driver.find_element(By.XPATH, "//div[contains(text(),'COMPOSE')]")
+        return self.find_by(By.XPATH, "//div[contains(text(),'COMPOSE')]")
+
+    def first_email_entry(self):
+        return self.find_by(By.XPATH, "//span[contains(@class, 'yP')]")
+
+    def first_email_entry_content(self):
+        return self.find_by(By.XPATH, "/html/body/div/div/div/div/div/div/div/div/div/div/div/"
+                                      "div/div/div/div/div/div/table/tbody/tr/td/div/div/div/span[2]")
+        # return self.driver.find_element(By.XPATH, "//span[@class='y2']")
+
+    def first_email_entry_title(self):
+        return self.find_by(By.XPATH, "//div[contains(@class, 'y6')]/descendant::span/b")
 
     def all_mail_to_list(self):
         return self.driver.find_elements(By.XPATH, "//div[contains(@class,'yW')]")
 
     def all_mail_body_list(self):
         return self.driver.find_elements(By.XPATH, "//div[contains(@class,'y6')]")
-
-    def first_email_entry(self):
-        return self.driver.find_element(By.XPATH, "//span[contains(@class, 'yP')]")
-
-    def first_email_entry_content(self):
-        return self.driver.find_element(By.XPATH, "/html/body/div/div/div/div/div/div/div/div/div/div/div/"
-                                                  "div/div/div/div/div/div/table/tbody/tr/td/div/div/div/span[2]")
-        # return self.driver.find_element(By.XPATH, "//span[@class='y2']")
-
-    def first_email_entry_title(self):
-        return self.driver.find_element(By.XPATH, "//div[contains(@class, 'y6')]/descendant::span/b")
-
 
 
 if __name__ == '__main__':

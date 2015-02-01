@@ -29,3 +29,6 @@ class HomePage:
 
     def wait_for(self, element):
         self.wait.until(EC.visibility_of(element))
+
+    def find_by(self, *pars):
+        return self.driver.find_element(*pars)
