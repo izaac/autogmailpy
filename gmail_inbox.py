@@ -72,7 +72,7 @@ class GmailInbox(HomePage):
     def check_in_sent(self):
         sent_link = self.locate_sent_link()
         sent_link.click()
-        time.sleep(5)
+        time.sleep(3)
 
     @property
     def body(self):
@@ -119,7 +119,9 @@ class GmailInbox(HomePage):
         return self.driver.find_element(By.XPATH, "//span[contains(@class, 'yP')]")
 
     def first_email_entry_content(self):
-        return self.driver.find_element(By.XPATH, "//span[@class='y2']")
+        return self.driver.find_element(By.XPATH, "/html/body/div/div/div/div/div/div/div/div/div/div/div/"
+                                                  "div/div/div/div/div/div/table/tbody/tr/td/div/div/div/span[2]")
+        # return self.driver.find_element(By.XPATH, "//span[@class='y2']")
 
     def first_email_entry_title(self):
         return self.driver.find_element(By.XPATH, "//div[contains(@class, 'y6')]/descendant::span/b")
@@ -130,10 +132,17 @@ if __name__ == '__main__':
 
     from selenium import webdriver
     from selenium.webdriver.support.ui import WebDriverWait
+    import uuid
     driver = webdriver.Firefox()
     gbox = GmailInbox(driver)
     wait = WebDriverWait(driver, timeout=60)
     driver.implicitly_wait(5)
     gbox.wait = wait
     gbox.go_inbox()
+    # gbox.body = '{0}'.format(uuid.uuid4())
+    # gbox.compose()
+    # gbox.driver.switch_to.default_content()
+    gbox.check_in_sent()
+    gbox.wait_for(gbox.first_email_entry_content())
+    print(gbox.first_email_entry_content().text)
     gbox.quit()
