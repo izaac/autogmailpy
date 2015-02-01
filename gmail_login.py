@@ -38,7 +38,7 @@ class GmailLogin(HomePage):
         self._click_loginform_login()
 
         try:
-            self.wait_for(self.locate_inbox_element())
+            self.wait_for(self.locate_inbox_link())
         except NoSuchElementException as nsee:
             print('Couldnt locate element after valid login {0}'.format(nsee))
             inbox_present = False
@@ -73,8 +73,8 @@ class GmailLogin(HomePage):
     def locate_passwd_field(self):
         return self.driver.find_element(By.ID, 'Passwd')
 
-    def locate_inbox_element(self):
-        return self.driver.find_element(By.XPATH, "//div[@id=':36']")
+    def locate_inbox_link(self):
+        return self.driver.find_element(By.XPATH, "//a[contains(@title,'Inbox')]")
 
     def locate_error_message(self):
         return self.driver.find_element(By.ID, 'errormsg_0_Passwd')

@@ -59,8 +59,6 @@ class GmailInbox(HomePage):
 
         inbox_link = self.locate_inbox_link()
         inbox_link.click()
-        # This is out of control of Selenium Waits, give enough time for email to arrive
-        # if previously sent
         time.sleep(5)
         mail_counter = self.locate_email_counter()
         mail_counter = mail_counter.text.split()[-1]
@@ -72,7 +70,9 @@ class GmailInbox(HomePage):
         return mail_counter
 
     def check_in_sent(self):
-        pass
+        sent_link = self.locate_sent_link()
+        sent_link.click()
+        time.sleep(5)
 
     @property
     def body(self):
@@ -100,11 +100,30 @@ class GmailInbox(HomePage):
     def locate_inbox_link(self):
         return self.driver.find_element(By.XPATH, "//a[contains(@title,'Inbox')]")
 
+    def locate_sent_link(self):
+        return self.driver.find_element(By.XPATH, "//a[contains(@title,'Sent Mail')]")
+
     def locate_email_counter(self):
         return self.driver.find_element(By.CLASS_NAME, "Dj")
 
     def locate_compose_button(self):
         return self.driver.find_element(By.XPATH, "//div[contains(text(),'COMPOSE')]")
+
+    def all_mail_to_list(self):
+        return self.driver.find_elements(By.XPATH, "//div[contains(@class,'yW')]")
+
+    def all_mail_body_list(self):
+        return self.driver.find_elements(By.XPATH, "//div[contains(@class,'y6')]")
+
+    def first_email_entry(self):
+        return self.driver.find_element(By.XPATH, "//span[contains(@class, 'yP')]")
+
+    def first_email_entry_content(self):
+        return self.driver.find_element(By.XPATH, "//span[@class='y2']")
+
+    def first_email_entry_title(self):
+        return self.driver.find_element(By.XPATH, "//div[contains(@class, 'y6')]/descendant::span/b")
+
 
 
 if __name__ == '__main__':
@@ -117,14 +136,4 @@ if __name__ == '__main__':
     driver.implicitly_wait(5)
     gbox.wait = wait
     gbox.go_inbox()
-    gbox.body = 'This is the Email Body'
-    total_emails = gbox.get_inbox_total()
-    print('Before compose: {0}'.format(total_emails))
-    gbox.compose()
-    total_emails1 = gbox.get_inbox_total()
-    print('After compose: {0}'.format(total_emails1))
-
-    if total_emails1 > total_emails:
-        print("Got Email!")
-
     gbox.quit()
