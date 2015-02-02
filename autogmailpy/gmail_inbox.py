@@ -75,6 +75,47 @@ class GmailInbox(HomePage):
         sent_link.click()
         time.sleep(3)
 
+    def delete_from_spam(self):
+
+        more_less_button = self.locate_more_less()
+        more_less_button.click()
+        self.wait_for(self.locate_spam_link())
+        spam_link = self.locate_spam_link()
+        spam_link.click()
+
+        not_empty = True
+        try:
+            self.locate_no_spam()
+        except NoSuchElementException as nsee:
+            print('There is Spam {0}'.format(nsee))
+        else:
+            not_empty = False
+
+        if not_empty:
+
+            total_spam_items = self.get_inbox_total()
+            first_element = self.first_element_checkbox()
+            first_element.click()
+            self.wait_for(self.locate_delforever_button())
+            del_forever = self.locate_delforever_button()
+            del_forever.click()
+            self.wait_for(self.locate_delforever_confirmation())
+
+            try:
+                self.locate_no_spam()
+            except NoSuchElementException as nsee:
+                print('There is Spam {0}'.format(nsee))
+            else:
+                return True if total_spam_items > 0 else False
+
+            if total_spam_items > self.get_inbox_total():
+                return True
+            else:
+                return False
+        else:
+            # Empty
+            return True
+
     @property
     def body(self):
         return self._body
@@ -104,6 +145,12 @@ class GmailInbox(HomePage):
     def locate_sent_link(self):
         return self.find_by(By.XPATH, "//a[contains(@title,'Sent Mail')]")
 
+    def locate_spam_link(self):
+        return self.find_by(By.XPATH, "//a[contains(@title,'Spam')]")
+
+    def locate_no_spam(self):
+        return self.find_by(By.XPATH, "//td[contains(text(), 'Hooray, no spam here!')]")
+
     def locate_email_counter(self):
         return self.find_by(By.CLASS_NAME, "Dj")
 
@@ -126,6 +173,18 @@ class GmailInbox(HomePage):
 
     def all_mail_body_list(self):
         return self.driver.find_elements(By.XPATH, "//div[contains(@class,'y6')]")
+
+    def first_element_checkbox(self):
+        return self.find_by(By.XPATH, "//td[2]/div/div")
+
+    def locate_delforever_button(self):
+        return self.find_by(By.XPATH, "//div[contains(text(),'Delete forever')]")
+
+    def locate_delforever_confirmation(self):
+        return self.find_by(By.XPATH, "//div[contains(text(), 'The conversation has been deleted.')")
+
+    def locate_more_less(self):
+        return self.find_by(By.CLASS_NAME, "CJ")
 
 
 if __name__ == '__main__':
