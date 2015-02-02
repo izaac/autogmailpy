@@ -1,15 +1,15 @@
-__author__ = 'Jorge'
-
 import sys
 import unittest
 import uuid
 from locale import LC_ALL, setlocale
+
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 
-from helpers import *
-from gmail_inbox import GmailInbox
+from autogmailpy.helpers import *
+from autogmailpy.gmail_inbox import GmailInbox
+
 
 setlocale(LC_ALL, '')
 bin_path = os.environ.get('BIN_PATH')

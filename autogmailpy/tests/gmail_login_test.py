@@ -1,12 +1,14 @@
 import sys
 import unittest
 from locale import LC_ALL, setlocale
+
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 
-from gmail_login import GmailLogin
-from helpers import *
+from autogmailpy.gmail_login import GmailLogin
+from autogmailpy.helpers import *
+
 
 setlocale(LC_ALL, '')
 bin_path = os.environ.get('BIN_PATH')

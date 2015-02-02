@@ -1,13 +1,14 @@
 __author__ = 'Jorge'
 import time
+
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 
-from homepage import HomePage
-from gmail_login import GmailLogin
-from helpers import config
+from autogmailpy.homepage import HomePage
+from autogmailpy.gmail_login import GmailLogin
+from autogmailpy.helpers import config
 
 
 class GmailInbox(HomePage):
@@ -131,7 +132,7 @@ if __name__ == '__main__':
 
     from selenium import webdriver
     from selenium.webdriver.support.ui import WebDriverWait
-    import uuid
+
     driver = webdriver.Firefox()
     gbox = GmailInbox(driver)
     wait = WebDriverWait(driver, timeout=60)

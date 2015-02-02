@@ -1,10 +1,9 @@
-import time
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.action_chains import ActionChains
 
-from homepage import HomePage
-from helpers import config
+from autogmailpy.homepage import HomePage
+from autogmailpy.helpers import config
+
 
 class GmailLogin(HomePage):
 
