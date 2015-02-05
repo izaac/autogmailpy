@@ -50,8 +50,8 @@ class TestGmailInbox(unittest.TestCase):
         self.gbox.body = '{0}'.format(uuid.uuid4())
         self.gbox.compose()
         self.gbox.check_in_sent()
-        self.gbox.wait_for(self.gbox.first_email_entry_content())
-        first_sent_entry = self.gbox.first_email_entry_content().text
+        self.gbox.wait_for(self.gbox._first_email_entry_content())
+        first_sent_entry = self.gbox._first_email_entry_content().text
         self.assertEqual(first_sent_entry[3:], self.gbox.body)
 
     @screenshot_on_error

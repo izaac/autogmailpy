@@ -29,20 +29,20 @@ class GmailInbox(HomePage):
 
         if login.login_valid():
             try:
-                self.compose_button = self.locate_compose_button()
+                self.compose_button = self._locate_compose_button()
             except NoSuchElementException as nsee:
                 print('No Compose button {0}'.format(nsee))
 
     def compose(self):
 
-        self.wait_for(self.locate_compose_button())
+        self.wait_for(self._locate_compose_button())
         self.compose_button.click()
         self.driver.implicitly_wait(10)
-        self.compose_frame_visible()
-        to_mail = self.locate_compose_to()
+        self._compose_frame_visible()
+        to_mail = self._locate_compose_to()
         to_mail.clear()
         to_mail.send_keys(config['email'])
-        subject = self.locate_compose_subject()
+        subject = self._locate_compose_subject()
         subject.clear()
         subject.send_keys("Hi!")
 
@@ -51,17 +51,17 @@ class GmailInbox(HomePage):
         actions.send_keys(self.body)
         actions.perform()
 
-        self.wait_for(self.locate_send_button())
-        send = self.locate_send_button()
+        self.wait_for(self._locate_send_button())
+        send = self._locate_send_button()
         send.click()
-        self.wait_for(self.locate_sent_message())
+        self.wait_for(self._locate_sent_message())
 
     def get_inbox_total(self):
 
-        inbox_link = self.locate_inbox_link()
+        inbox_link = self._locate_inbox_link()
         inbox_link.click()
         time.sleep(5)
-        mail_counter = self.locate_email_counter()
+        mail_counter = self._locate_email_counter()
         mail_counter = mail_counter.text.split()[-1]
         try:
             mail_counter = int(mail_counter)
@@ -71,21 +71,21 @@ class GmailInbox(HomePage):
         return mail_counter
 
     def check_in_sent(self):
-        sent_link = self.locate_sent_link()
+        sent_link = self._locate_sent_link()
         sent_link.click()
         time.sleep(3)
 
     def delete_from_spam(self):
 
-        more_less_button = self.locate_more_less()
+        more_less_button = self._locate_more_less()
         more_less_button.click()
-        self.wait_for(self.locate_spam_link())
-        spam_link = self.locate_spam_link()
+        self.wait_for(self._locate_spam_link())
+        spam_link = self._locate_spam_link()
         spam_link.click()
 
         not_empty = True
         try:
-            self.locate_no_spam()
+            self._locate_no_spam()
         except NoSuchElementException as nsee:
             print('There is Spam {0}'.format(nsee))
         else:
@@ -94,15 +94,15 @@ class GmailInbox(HomePage):
         if not_empty:
 
             total_spam_items = self.get_inbox_total()
-            first_element = self.first_element_checkbox()
+            first_element = self._first_element_checkbox()
             first_element.click()
-            self.wait_for(self.locate_delforever_button())
-            del_forever = self.locate_delforever_button()
+            self.wait_for(self._locate_delforever_button())
+            del_forever = self._locate_delforever_button()
             del_forever.click()
-            self.wait_for(self.locate_delforever_confirmation())
+            self.wait_for(self._locate_delforever_confirmation())
 
             try:
-                self.locate_no_spam()
+                self._locate_no_spam()
             except NoSuchElementException as nsee:
                 print('There is Spam {0}'.format(nsee))
             else:
@@ -124,84 +124,64 @@ class GmailInbox(HomePage):
     def body(self, obj):
         self._body = obj
 
-    def compose_frame_visible(self):
+    def _compose_frame_visible(self):
         self.driver.find_by(By.XPATH, "//td//img[2]")
 
-    def locate_send_button(self):
+    def _locate_send_button(self):
         return self.find_by(By.XPATH, "//div[text()='Send']")
 
-    def locate_sent_message(self):
+    def _locate_sent_message(self):
         return self.find_by(By.CLASS_NAME, 'vh')
 
-    def locate_compose_subject(self):
+    def _locate_compose_subject(self):
         return self.find_by(By.CLASS_NAME, "aoT")
 
-    def locate_compose_to(self):
+    def _locate_compose_to(self):
         return self.find_by(By.CLASS_NAME, "vO")
 
-    def locate_inbox_link(self):
+    def _locate_inbox_link(self):
         return self.find_by(By.XPATH, "//a[contains(@title,'Inbox')]")
 
-    def locate_sent_link(self):
+    def _locate_sent_link(self):
         return self.find_by(By.XPATH, "//a[contains(@title,'Sent Mail')]")
 
-    def locate_spam_link(self):
+    def _locate_spam_link(self):
         return self.find_by(By.XPATH, "//a[contains(@title,'Spam')]")
 
-    def locate_no_spam(self):
+    def _locate_no_spam(self):
         return self.find_by(By.XPATH, "//td[contains(text(), 'Hooray, no spam here!')]")
 
-    def locate_email_counter(self):
+    def _locate_email_counter(self):
         return self.find_by(By.CLASS_NAME, "Dj")
 
-    def locate_compose_button(self):
+    def _locate_compose_button(self):
         return self.find_by(By.XPATH, "//div[contains(text(),'COMPOSE')]")
 
-    def first_email_entry(self):
+    def _first_email_entry(self):
         return self.find_by(By.XPATH, "//span[contains(@class, 'yP')]")
 
-    def first_email_entry_content(self):
+    def _first_email_entry_content(self):
         return self.find_by(By.XPATH, "/html/body/div/div/div/div/div/div/div/div/div/div/div/"
                                       "div/div/div/div/div/div/table/tbody/tr/td/div/div/div/span[2]")
         # return self.driver.find_element(By.XPATH, "//span[@class='y2']")
 
-    def first_email_entry_title(self):
+    def _first_email_entry_title(self):
         return self.find_by(By.XPATH, "//div[contains(@class, 'y6')]/descendant::span/b")
 
-    def all_mail_to_list(self):
+    def _all_mail_to_list(self):
         return self.driver.find_elements(By.XPATH, "//div[contains(@class,'yW')]")
 
-    def all_mail_body_list(self):
+    def _all_mail_body_list(self):
         return self.driver.find_elements(By.XPATH, "//div[contains(@class,'y6')]")
 
-    def first_element_checkbox(self):
+    def _first_element_checkbox(self):
         return self.find_by(By.XPATH, "//td[2]/div/div")
 
-    def locate_delforever_button(self):
+    def _locate_delforever_button(self):
         return self.find_by(By.XPATH, "//div[contains(text(),'Delete forever')]")
 
-    def locate_delforever_confirmation(self):
+    def _locate_delforever_confirmation(self):
         return self.find_by(By.XPATH, "//div[contains(text(), 'The conversation has been deleted.')")
 
-    def locate_more_less(self):
+    def _locate_more_less(self):
         return self.find_by(By.CLASS_NAME, "CJ")
-
-
-if __name__ == '__main__':
-
-    from selenium import webdriver
-    from selenium.webdriver.support.ui import WebDriverWait
-
-    driver = webdriver.Firefox()
-    gbox = GmailInbox(driver)
-    wait = WebDriverWait(driver, timeout=60)
-    driver.implicitly_wait(5)
-    gbox.wait = wait
-    gbox.go_inbox()
-    # gbox.body = '{0}'.format(uuid.uuid4())
-    # gbox.compose()
-    # gbox.driver.switch_to.default_content()
-    gbox.check_in_sent()
-    gbox.wait_for(gbox.first_email_entry_content())
-    print(gbox.first_email_entry_content().text)
-    gbox.quit()
