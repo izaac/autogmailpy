@@ -1,7 +1,7 @@
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 
-from autogmailpy.homepage import HomePage
+from autogmailpy.pages.homepage import HomePage
 from autogmailpy.helpers import config
 
 
