@@ -26,14 +26,14 @@ class TestGmailInbox(unittest.TestCase):
             self.driver = webdriver.Firefox(firefox_binary=ffbin)
 
         self.wait = WebDriverWait(self.driver, timeout=60)
-        self.driver.implicitly_wait(5)
+        self.driver.implicitly_wait(25)
         self.gbox = None
 
     def _setup_driver(self):
         self.gbox = GmailInbox(self.driver)
         self.gbox.wait = self.wait
 
-    @screenshot_on_error
+    # @screenshot_on_error
     def test_compose_email(self):
         self._setup_driver()
         self.gbox.go_inbox()

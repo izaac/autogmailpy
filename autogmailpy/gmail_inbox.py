@@ -125,7 +125,7 @@ class GmailInbox(HomePage):
         self._body = obj
 
     def _compose_frame_visible(self):
-        self.driver.find_by(By.XPATH, "//td//img[2]")
+        self.find_by(By.XPATH, "//td//img[2]")
 
     def _locate_send_button(self):
         return self.find_by(By.XPATH, "//div[text()='Send']")
