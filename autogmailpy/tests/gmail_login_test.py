@@ -6,7 +6,7 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 
-from autogmailpy.gmail_login import GmailLogin
+from autogmailpy.pages.gmail_login import GmailLogin
 from autogmailpy.helpers import *
 
 

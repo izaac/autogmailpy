@@ -1,4 +1,4 @@
 __author__ = 'Jorge'
 
-from .gmail_inbox import *
-from .gmail_login import *
+from autogmailpy.pages.gmail_inbox import *
+from autogmailpy.pages.gmail_login import *

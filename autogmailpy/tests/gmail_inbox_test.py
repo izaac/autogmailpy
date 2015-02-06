@@ -8,7 +8,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 
 from autogmailpy.helpers import *
-from autogmailpy.gmail_inbox import GmailInbox
+from autogmailpy.pages.gmail_inbox import GmailInbox
 
 
 setlocale(LC_ALL, '')

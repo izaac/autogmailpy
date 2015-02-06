@@ -7,7 +7,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 
 from autogmailpy.homepage import HomePage
-from autogmailpy.gmail_login import GmailLogin
+from autogmailpy.pages.gmail_login import GmailLogin
 from autogmailpy.helpers import config
 
 
