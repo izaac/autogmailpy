@@ -3,8 +3,6 @@ import time
 
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.common.keys import Keys
 
 from autogmailpy.pages.homepage import HomePage
 from autogmailpy.pages.gmail_login import GmailLogin
@@ -46,10 +44,8 @@ class GmailInbox(HomePage):
         subject.clear()
         subject.send_keys("Hi!")
 
-        actions = ActionChains(self.driver)
-        actions.key_down(Keys.TAB)
-        actions.send_keys(self.body)
-        actions.perform()
+        body = self._locate_compose_body()
+        body.send_keys(self.body)
 
         self.wait_for(self._locate_send_button())
         send = self._locate_send_button()
@@ -125,7 +121,7 @@ class GmailInbox(HomePage):
         self._body = obj
 
     def _compose_frame_visible(self):
-        self.find_by(By.XPATH, "//td//img[2]")
+        self.find_by(By.XPATH, "//div[contains(text(),'COMPOSE')]")
 
     def _locate_send_button(self):
         return self.find_by(By.XPATH, "//div[text()='Send']")
@@ -138,6 +134,9 @@ class GmailInbox(HomePage):
 
     def _locate_compose_to(self):
         return self.find_by(By.CLASS_NAME, "vO")
+
+    def _locate_compose_body(self):
+        return self.find_by(By.XPATH, "//div[contains(@aria-label, 'Message Body')]")
 
     def _locate_inbox_link(self):
         return self.find_by(By.XPATH, "//a[contains(@title,'Inbox')]")
@@ -185,3 +184,24 @@ class GmailInbox(HomePage):
 
     def _locate_more_less(self):
         return self.find_by(By.CLASS_NAME, "CJ")
+
+    def _locate_more_options(self):
+        return self.find_by(By.XPATH, "//div[contains(@aria-label, 'More options')]")
+
+if __name__ == '__main__':
+    from selenium import webdriver
+    from selenium.webdriver.support.ui import WebDriverWait
+    driver = webdriver.Firefox()
+    wait = WebDriverWait(driver, timeout=60)
+    gmailibox = GmailInbox(driver)
+    gmailibox.wait = wait
+    gmailibox.go_inbox()
+    gmailibox.driver.implicitly_wait(20)
+    gmailibox.wait_for(gmailibox._locate_compose_button())
+    compose = gmailibox._locate_compose_button()
+    compose.click()
+    mopts = gmailibox._locate_more_options()
+    mopts.click()
+
+    gmailibox.quit()
+    pass
