@@ -30,6 +30,7 @@ class GmailLogin(HomePage):
 
     def login_valid(self):
 
+        self.driver.implicitly_wait(20)
         self.wait_for(self._locate_signin_button())
         self._locate_loginform_elements()
 
@@ -77,15 +78,3 @@ class GmailLogin(HomePage):
 
     def _locate_error_message(self):
         return self.find_by(By.ID, 'errormsg_0_Passwd')
-
-if __name__ == '__main__':
-    pass
-
-    # driver.implicitly_wait(5)
-    # base_url = ''
-    # gmailbox = GmailInbox(driver)
-    # gmailbox.wait = wait
-    # gmailbox.driver.base_url = 'https://gmail.com'
-    # gmailbox.driver.get(gmailbox.driver.base_url)
-    # gmailbox.go_inbox()
-
