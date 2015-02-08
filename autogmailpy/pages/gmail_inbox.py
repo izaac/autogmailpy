@@ -1,6 +1,4 @@
 __author__ = 'Jorge'
-import time
-
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 
@@ -15,6 +13,7 @@ class GmailInbox(HomePage):
         super(GmailInbox, self).__init__(driver)
         self.compose_button = None
         self._body = ""
+        self._subject = "Hi!"
         self.driver = driver
 
     def go_inbox(self):
@@ -26,6 +25,7 @@ class GmailInbox(HomePage):
         self.driver.get('https://gmail.com')
 
         if login.login_valid():
+            self.driver.implicitly_wait(5)
             try:
                 self.compose_button = self._locate_compose_button()
             except NoSuchElementException as nsee:
@@ -42,7 +42,7 @@ class GmailInbox(HomePage):
         to_mail.send_keys(config['email'])
         subject = self._locate_compose_subject()
         subject.clear()
-        subject.send_keys("Hi!")
+        subject.send_keys(self.subject)
 
         body = self._locate_compose_body()
         body.send_keys(self.body)
@@ -52,13 +52,20 @@ class GmailInbox(HomePage):
         send.click()
         self.wait_for(self._locate_sent_message())
 
-    def get_inbox_total(self):
+    def get_current_total(self, inbox=False):
 
-        inbox_link = self._locate_inbox_link()
-        inbox_link.click()
-        time.sleep(5)
-        mail_counter = self._locate_email_counter()
-        mail_counter = mail_counter.text.split()[-1]
+        if inbox:
+            inbox_link = self._locate_inbox_link()
+            inbox_link.click()
+
+        self.driver.implicitly_wait(5)
+
+        if inbox:
+            mail_counter = self._locate_email_counter_total(inbox=True)
+        else:
+            mail_counter = self._locate_email_counter_total()
+        mail_counter = mail_counter.text
+
         try:
             mail_counter = int(mail_counter)
         except ValueError:
@@ -69,7 +76,7 @@ class GmailInbox(HomePage):
     def check_in_sent(self):
         sent_link = self._locate_sent_link()
         sent_link.click()
-        time.sleep(3)
+        self.driver.implicitly_wait(3)
 
     def delete_from_spam(self):
 
@@ -89,7 +96,7 @@ class GmailInbox(HomePage):
 
         if not_empty:
 
-            total_spam_items = self.get_inbox_total()
+            total_spam_items = self.get_current_total()
             first_element = self._first_element_checkbox()
             first_element.click()
             self.wait_for(self._locate_delforever_button())
@@ -104,13 +111,81 @@ class GmailInbox(HomePage):
             else:
                 return True if total_spam_items > 0 else False
 
-            if total_spam_items > self.get_inbox_total():
+            if total_spam_items > self.get_current_total():
                 return True
             else:
                 return False
         else:
             # Empty
             return True
+
+    def delete_from_filter(self):
+
+        more_less_button = self._locate_more_less()
+        more_less_button.click()
+        self.wait_for(self._locate_test_link())
+        test_link = self._locate_test_link()
+        test_link.click()
+
+        not_empty = True
+        try:
+            self._locate_no_email_filter()
+        except NoSuchElementException as nsee:
+            print('There are emails in the filter {0}'.format(nsee))
+        else:
+            not_empty = False
+
+        if not_empty:
+
+            self.driver.implicitly_wait(5)
+            total_filter_items = self.get_current_total()
+            first_element = self._first_element_checkbox_filter()
+            first_element.click()
+            self.driver.implicitly_wait(3)
+            self.wait_for(self._locate_delete_button())
+            delete = self._locate_delete_button()
+            delete.click()
+            self.driver.implicitly_wait(3)
+            self.wait_for(self._locate_delete_confirmation())
+
+            try:
+                self._locate_no_email_filter()
+            except NoSuchElementException as nsee:
+                print('No emails in this filter'.format(nsee))
+            else:
+                return True if total_filter_items > 0 else False
+
+            if total_filter_items > self.get_current_total():
+                return True
+            else:
+                return False
+        else:
+            # Empty
+            return True
+
+    def check_compose_spelling(self):
+
+        self.driver.implicitly_wait(20)
+        self.wait_for(self._locate_compose_button())
+        compose = self._locate_compose_button()
+        compose.click()
+        message = self._locate_compose_body()
+        message.send_keys(self.body)
+        mopts = self._locate_more_options()
+        mopts.click()
+        check_spelling = self._locate_check_spelling_button()
+        check_spelling.click()
+        self.driver.implicitly_wait(5)
+
+        bad_words = False
+        try:
+            self._locate_bad_spelled()
+        except NoSuchElementException as nsee:
+            print('No Bad Words detected {0}'.format(nsee))
+        else:
+            bad_words = True
+
+        return bad_words
 
     @property
     def body(self):
@@ -119,6 +194,14 @@ class GmailInbox(HomePage):
     @body.setter
     def body(self, obj):
         self._body = obj
+
+    @property
+    def subject(self):
+        return self._subject
+
+    @subject.setter
+    def subject(self, obj):
+        self._subject = obj
 
     def _compose_frame_visible(self):
         self.find_by(By.XPATH, "//div[contains(text(),'COMPOSE')]")
@@ -144,14 +227,24 @@ class GmailInbox(HomePage):
     def _locate_sent_link(self):
         return self.find_by(By.XPATH, "//a[contains(@title,'Sent Mail')]")
 
+    def _locate_test_link(self):
+        return self.find_by(By.XPATH, "//a[contains(@title,'testx')]")
+
     def _locate_spam_link(self):
         return self.find_by(By.XPATH, "//a[contains(@title,'Spam')]")
 
     def _locate_no_spam(self):
         return self.find_by(By.XPATH, "//td[contains(text(), 'Hooray, no spam here!')]")
 
-    def _locate_email_counter(self):
-        return self.find_by(By.CLASS_NAME, "Dj")
+    def _locate_no_email_filter(self):
+        return self.find_by(By.XPATH, "//td[contains(text(), 'There are no conversations with this label')]")
+
+    def _locate_email_counter_total(self, inbox=False):
+        if inbox:
+            return self.find_by(By.XPATH, "//span[contains(@class, 'Dj')]/b[3]")
+        else:
+            return self.find_by(By.XPATH, "/html/body/div[7]/div[3]/div/div[2]/div[1]/div[2]/div/div/div/div[1]/div[2]/"
+                                          "div[1]/div[2]/div[1]/span/div[1]/span/b[3]")
 
     def _locate_compose_button(self):
         return self.find_by(By.XPATH, "//div[contains(text(),'COMPOSE')]")
@@ -176,11 +269,23 @@ class GmailInbox(HomePage):
     def _first_element_checkbox(self):
         return self.find_by(By.XPATH, "//td[2]/div/div")
 
+    def _first_element_checkbox_filter(self):
+        return self.find_by(By.XPATH, "/html/body/div[7]/div[3]/div/div[2]/div[1]/div[2]/div/div/div/div[2]/div[1]/"
+                                      "div[1]/div/div/div[5]/div[1]/div/table/tbody/tr[1]/td[2]/div")
+
     def _locate_delforever_button(self):
         return self.find_by(By.XPATH, "//div[contains(text(),'Delete forever')]")
 
+    def _locate_delete_button(self):
+        return self.find_by(By.XPATH, "/html/body/div[7]/div[3]/div/div[2]/div[1]/div[2]/div/div/div/div[1]/div[2]/"
+                                      "div[1]/div[1]/div/div/div[2]/div[3]")
+
     def _locate_delforever_confirmation(self):
         return self.find_by(By.XPATH, "//div[contains(text(), 'The conversation has been deleted.')")
+
+    def _locate_delete_confirmation(self):
+        return self.find_by(By.XPATH, "/html/body/div[7]/div[3]/div/div[1]/div[5]/div[1]/div[2]/div[3]/div/div/"
+                                      "div[2]/span[1]")
 
     def _locate_more_less(self):
         return self.find_by(By.CLASS_NAME, "CJ")
@@ -188,20 +293,8 @@ class GmailInbox(HomePage):
     def _locate_more_options(self):
         return self.find_by(By.XPATH, "//div[contains(@aria-label, 'More options')]")
 
-if __name__ == '__main__':
-    from selenium import webdriver
-    from selenium.webdriver.support.ui import WebDriverWait
-    driver = webdriver.Firefox()
-    wait = WebDriverWait(driver, timeout=60)
-    gmailibox = GmailInbox(driver)
-    gmailibox.wait = wait
-    gmailibox.go_inbox()
-    gmailibox.driver.implicitly_wait(20)
-    gmailibox.wait_for(gmailibox._locate_compose_button())
-    compose = gmailibox._locate_compose_button()
-    compose.click()
-    mopts = gmailibox._locate_more_options()
-    mopts.click()
+    def _locate_check_spelling_button(self):
+        return self.find_by(By.XPATH, "//div[contains(text(),'Check spelling')]")
 
-    gmailibox.quit()
-    pass
+    def _locate_bad_spelled(self):
+        self.find_by(By.XPATH, "//span[@data-g-spell-status]")
