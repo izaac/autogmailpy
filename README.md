@@ -14,3 +14,4 @@ Or simply run the package: `python setup.py test`
 
 - Python 3+
 - Selenium
+- Firefox

@@ -260,12 +260,6 @@ class GmailInbox(HomePage):
     def _first_email_entry_title(self):
         return self.find_by(By.XPATH, "//div[contains(@class, 'y6')]/descendant::span/b")
 
-    def _all_mail_to_list(self):
-        return self.driver.find_elements(By.XPATH, "//div[contains(@class,'yW')]")
-
-    def _all_mail_body_list(self):
-        return self.driver.find_elements(By.XPATH, "//div[contains(@class,'y6')]")
-
     def _first_element_checkbox(self):
         return self.find_by(By.XPATH, "//td[2]/div/div")
 
