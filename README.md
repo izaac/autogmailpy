@@ -15,3 +15,4 @@ Or simply run the package: `python setup.py test`
 - Python 3+
 - Selenium
 - Firefox
+- Gmail account configured in the autogmailpy.helpers dictionary
