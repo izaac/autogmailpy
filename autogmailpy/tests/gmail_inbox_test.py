@@ -13,15 +13,15 @@ class TestGmailInbox(BaseTest):
         super(TestGmailInbox, self).setUp()
         self.gbox = GmailInbox(self.driver)
         self.gbox.wait = self.wait
+        self.gbox.go_inbox()
 
     @screenshot_on_error
     def test_compose_email(self):
 
-        self.gbox.go_inbox()
         self.gbox.body = 'This is the Email Body'
         total_emails_before = self.gbox.get_current_total(inbox=True)
         self.gbox.compose()
-        self.gbox._locate_inbox_link().click()
+        self.gbox.click_inbox_link()
         self.gbox.driver.implicitly_wait(3)
         total_emails_after = self.gbox.get_current_total(inbox=True)
         self.assertLess(total_emails_before, total_emails_after)
@@ -29,7 +29,6 @@ class TestGmailInbox(BaseTest):
     @screenshot_on_error
     def test_validate_sent_item(self):
 
-        self.gbox.go_inbox()
         self.gbox.body = '{0}'.format(uuid.uuid4())
         self.gbox.compose()
         self.gbox.check_in_sent()
@@ -40,20 +39,17 @@ class TestGmailInbox(BaseTest):
     @screenshot_on_error
     def test_validate_spam_delete(self):
 
-        self.gbox.go_inbox()
         self.assertTrue(self.gbox.delete_from_spam())
 
     @screenshot_on_error
     def test_validate_compose_spelling(self):
 
-        self.gbox.go_inbox()
         self.gbox.body = "bad sfdfdfdf"
         self.assertTrue(self.gbox.check_compose_spelling())
 
     @screenshot_on_error
     def test_validate_delete_from_filter(self):
 
-        self.gbox.go_inbox()
         uuid_gen = uuid.uuid4()
         self.gbox.body = '{0}'.format(uuid_gen)
         self.gbox.subject = '[test] {0}'.format(uuid_gen)

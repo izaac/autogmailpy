@@ -292,3 +292,6 @@ class GmailInbox(HomePage):
 
     def _locate_bad_spelled(self):
         self.find_by(By.XPATH, "//span[@data-g-spell-status]")
+
+    def click_inbox_link(self):
+        self.click_element(self._locate_inbox_link())

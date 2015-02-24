@@ -32,3 +32,7 @@ class HomePage:
 
     def find_by(self, *pars):
         return self.driver.find_element(*pars)
+
+    @staticmethod
+    def click_element(elem):
+        elem.click()
