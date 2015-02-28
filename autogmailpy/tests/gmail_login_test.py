@@ -29,7 +29,6 @@ class TestGmailLogin(BaseTest):
 
     def tearDown(self):
 
-        self.driver.refresh()
         self.driver.quit()
 
 if __name__ == '__main__':
