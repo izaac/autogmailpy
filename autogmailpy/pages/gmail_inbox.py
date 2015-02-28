@@ -81,8 +81,7 @@ class GmailInbox(HomePage):
         more_less_button = self._locate_more_less()
         more_less_button.click()
         self.wait_for(self._locate_spam_link())
-        spam_link = self._locate_spam_link()
-        spam_link.click()
+        self.click_spam_link()
 
         not_empty = True
         try:
