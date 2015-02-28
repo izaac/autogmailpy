@@ -48,15 +48,13 @@ class GmailInbox(HomePage):
         body.send_keys(self.body)
 
         self.wait_for(self._locate_send_button())
-        send = self._locate_send_button()
-        send.click()
+        self.click_send_button()
         self.wait_for(self._locate_sent_message())
 
     def get_current_total(self, inbox=False):
 
         if inbox:
-            inbox_link = self._locate_inbox_link()
-            inbox_link.click()
+            self.click_inbox_link()
 
         self.wait_secs(5)
 
@@ -75,8 +73,7 @@ class GmailInbox(HomePage):
         return mail_counter
 
     def check_in_sent(self):
-        sent_link = self._locate_sent_link()
-        sent_link.click()
+        self.click_sent_link()
         self.driver.implicitly_wait(3)
 
     def delete_from_spam(self):
@@ -101,8 +98,7 @@ class GmailInbox(HomePage):
             first_element = self._first_element_checkbox()
             first_element.click()
             self.wait_for(self._locate_delforever_button())
-            del_forever = self._locate_delforever_button()
-            del_forever.click()
+            self.click_delete_forever_button()
             self.wait_for(self._locate_delforever_confirmation())
 
             try:
@@ -144,8 +140,7 @@ class GmailInbox(HomePage):
             first_element.click()
             self.driver.implicitly_wait(3)
             self.wait_for(self._locate_delete_button())
-            delete = self._locate_delete_button()
-            delete.click()
+            self.click_delete_button()
             self.driver.implicitly_wait(3)
             self.wait_for(self._locate_delete_confirmation())
 
@@ -168,14 +163,11 @@ class GmailInbox(HomePage):
 
         self.driver.implicitly_wait(20)
         self.wait_for(self._locate_compose_button())
-        compose = self._locate_compose_button()
-        compose.click()
+        self.click_compose_button()
         message = self._locate_compose_body()
         message.send_keys(self.body)
-        mopts = self._locate_more_options()
-        mopts.click()
-        check_spelling = self._locate_check_spelling_button()
-        check_spelling.click()
+        self.click_more_options()
+        self.click_check_spelling_button()
         self.driver.implicitly_wait(5)
 
         bad_words = False
@@ -320,3 +312,6 @@ class GmailInbox(HomePage):
 
     def click_check_spelling_button(self):
         self.click_element(self._locate_check_spelling_button())
+
+    def click_more_options(self):
+        self.click_element(self._locate_more_options())
