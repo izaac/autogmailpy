@@ -24,4 +24,5 @@ class BaseTest(TestCase):
             ffbin = FirefoxBinary(firefox_path=bin_path, log_file=sys.stdout)
             self.driver = webdriver.Firefox(firefox_binary=ffbin)
 
+        self.driver.maximize_window()
         self.wait = WebDriverWait(self.driver, timeout=60)

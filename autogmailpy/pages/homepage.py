@@ -1,5 +1,6 @@
 __author__ = 'Jorge'
 from selenium.webdriver.support import expected_conditions as EC
+import time
 
 
 class HomePage:
@@ -36,3 +37,7 @@ class HomePage:
     @staticmethod
     def click_element(elem):
         elem.click()
+
+    @staticmethod
+    def wait_secs(seconds):
+        time.sleep(seconds)

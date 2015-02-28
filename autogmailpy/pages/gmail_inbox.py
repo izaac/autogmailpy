@@ -35,7 +35,7 @@ class GmailInbox(HomePage):
 
         self.wait_for(self._locate_compose_button())
         self.compose_button.click()
-        self.driver.implicitly_wait(10)
+        self.driver.implicitly_wait(7)
         self._compose_frame_visible()
         to_mail = self._locate_compose_to()
         to_mail.clear()
@@ -58,12 +58,13 @@ class GmailInbox(HomePage):
             inbox_link = self._locate_inbox_link()
             inbox_link.click()
 
-        self.driver.implicitly_wait(5)
+        self.wait_secs(5)
 
         if inbox:
             mail_counter = self._locate_email_counter_total(inbox=True)
         else:
             mail_counter = self._locate_email_counter_total()
+
         mail_counter = mail_counter.text
 
         try:
@@ -293,5 +294,29 @@ class GmailInbox(HomePage):
     def _locate_bad_spelled(self):
         self.find_by(By.XPATH, "//span[@data-g-spell-status]")
 
+    def wait_seconds(self, seconds):
+        self.wait_secs(seconds)
+
     def click_inbox_link(self):
         self.click_element(self._locate_inbox_link())
+
+    def click_sent_link(self):
+        self.click_element(self._locate_sent_link())
+
+    def click_spam_link(self):
+        self.click_element(self._locate_spam_link())
+
+    def click_compose_button(self):
+        self.click_element(self._locate_compose_button())
+
+    def click_send_button(self):
+        self.click_element(self._locate_send_button())
+
+    def click_delete_button(self):
+        self.click_element(self._locate_delete_button())
+
+    def click_delete_forever_button(self):
+        self.click_element(self._locate_delforever_button())
+
+    def click_check_spelling_button(self):
+        self.click_element(self._locate_check_spelling_button())
