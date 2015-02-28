@@ -11,7 +11,6 @@ class GmailInbox(HomePage):
 
     def __init__(self, driver):
         super(GmailInbox, self).__init__(driver)
-        self.compose_button = None
         self._body = ""
         self._subject = "Hi!"
         self.driver = driver
@@ -27,14 +26,14 @@ class GmailInbox(HomePage):
         if login.login_valid():
             self.driver.implicitly_wait(5)
             try:
-                self.compose_button = self._locate_compose_button()
+                self._locate_compose_button()
             except NoSuchElementException as nsee:
                 print('No Compose button {0}'.format(nsee))
 
     def compose(self):
 
         self.wait_for(self._locate_compose_button())
-        self.compose_button.click()
+        self.click_compose_button()
         self.driver.implicitly_wait(7)
         self._compose_frame_visible()
         to_mail = self._locate_compose_to()
