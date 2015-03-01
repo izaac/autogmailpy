@@ -24,10 +24,6 @@ class GmailLogin(HomePage):
         self.passwd.clear()
         self.passwd.send_keys(passwd_keys)
 
-    def _click_loginform_login(self):
-        sign_in = self._locate_signin_button()
-        sign_in.click()
-
     def login_valid(self):
 
         self.driver.implicitly_wait(20)
@@ -35,12 +31,12 @@ class GmailLogin(HomePage):
         self._locate_loginform_elements()
 
         self._fill_loginform_elements(passwd_keys=config['passwd_key'])
-        self._click_loginform_login()
+        self.click_login_button()
 
         try:
             self.wait_for(self._locate_inbox_link())
         except NoSuchElementException as nsee:
-            print('Couldnt locate element after valid login {0}'.format(nsee))
+            print("Couldn't locate element after valid login {0}".format(nsee))
             inbox_present = False
         else:
             inbox_present = True
@@ -52,7 +48,7 @@ class GmailLogin(HomePage):
         self._locate_loginform_elements()
 
         self._fill_loginform_elements()
-        self._click_loginform_login()
+        self.click_login_button()
 
         try:
             self.wait_for(self._locate_error_message())
@@ -78,3 +74,6 @@ class GmailLogin(HomePage):
 
     def _locate_error_message(self):
         return self.find_by(By.ID, 'errormsg_0_Passwd')
+
+    def click_login_button(self):
+        self.click_element(self._locate_signin_button())
