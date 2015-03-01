@@ -39,5 +39,9 @@ class HomePage:
         elem.click()
 
     @staticmethod
+    def get_text_from_element(elem):
+        return elem.text
+
+    @staticmethod
     def wait_secs(seconds):
         time.sleep(seconds)

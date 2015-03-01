@@ -313,3 +313,6 @@ class GmailInbox(HomePage):
 
     def click_more_options(self):
         self.click_element(self._locate_more_options())
+
+    def get_first_element_text(self):
+        return self.get_text_from_element(self._first_email_entry_content())

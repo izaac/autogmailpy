@@ -34,7 +34,7 @@ class TestGmailInbox(BaseTest):
         self.gbox.compose()
         self.gbox.check_in_sent()
         self.gbox.wait_for(self.gbox._first_email_entry_content())
-        first_sent_entry = self.gbox._first_email_entry_content().text
+        first_sent_entry = self.gbox.get_first_element_text()
         self.assertEqual(first_sent_entry[3:], self.gbox.body)
 
     @screenshot_on_error
