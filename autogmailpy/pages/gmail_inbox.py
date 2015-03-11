@@ -24,7 +24,6 @@ class GmailInbox(HomePage):
         self.driver.get('https://gmail.com')
 
         if login.login_valid():
-            self.driver.implicitly_wait(5)
             try:
                 self._locate_compose_button()
             except NoSuchElementException as nsee:
@@ -34,7 +33,6 @@ class GmailInbox(HomePage):
 
         self.wait_for(self._locate_compose_button())
         self.click_compose_button()
-        self.driver.implicitly_wait(7)
         self._compose_frame_visible()
         to_mail = self._locate_compose_to()
         to_mail.clear()
@@ -54,8 +52,6 @@ class GmailInbox(HomePage):
 
         if inbox:
             self.click_inbox_link()
-
-        self.wait_secs(5)
 
         if inbox:
             mail_counter = self._locate_email_counter_total(inbox=True)
@@ -132,14 +128,11 @@ class GmailInbox(HomePage):
 
         if not_empty:
 
-            self.driver.implicitly_wait(5)
             total_filter_items = self.get_current_total()
             first_element = self._first_element_checkbox_filter()
             first_element.click()
-            self.driver.implicitly_wait(3)
             self.wait_for(self._locate_delete_button())
             self.click_delete_button()
-            self.driver.implicitly_wait(3)
             self.wait_for(self._locate_delete_confirmation())
 
             try:
@@ -159,14 +152,12 @@ class GmailInbox(HomePage):
 
     def check_compose_spelling(self):
 
-        self.driver.implicitly_wait(20)
         self.wait_for(self._locate_compose_button())
         self.click_compose_button()
         message = self._locate_compose_body()
         message.send_keys(self.body)
         self.click_more_options()
         self.click_check_spelling_button()
-        self.driver.implicitly_wait(5)
 
         bad_words = False
         try:
@@ -285,7 +276,7 @@ class GmailInbox(HomePage):
         self.find_by(By.XPATH, "//span[@data-g-spell-status]")
 
     def wait_seconds(self, seconds):
-        self.wait_secs(seconds)
+        self.wait_secs(self.driver, seconds)
 
     def click_inbox_link(self):
         self.click_element(self._locate_inbox_link())

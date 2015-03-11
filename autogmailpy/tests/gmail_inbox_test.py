@@ -13,17 +13,16 @@ class TestGmailInbox(BaseTest):
         super(TestGmailInbox, self).setUp()
         self.gbox = GmailInbox(self.driver)
         self.gbox.wait = self.wait
+        self.gbox.wait_seconds(20)
         self.gbox.go_inbox()
 
     @screenshot_on_error
     def test_compose_email(self):
 
-        self.gbox.wait_seconds(5)
         self.gbox.body = 'This is the Email Body'
         total_emails_before = self.gbox.get_current_total(inbox=True)
         self.gbox.compose()
         self.gbox.click_inbox_link()
-        self.gbox.wait_seconds(5)
         total_emails_after = self.gbox.get_current_total(inbox=True)
         self.assertLess(total_emails_before, total_emails_after)
 
@@ -55,7 +54,6 @@ class TestGmailInbox(BaseTest):
         self.gbox.body = '{0}'.format(uuid_gen)
         self.gbox.subject = '[test] {0}'.format(uuid_gen)
         self.gbox.compose()
-        self.gbox.wait_seconds(3)
         self.assertTrue(self.gbox.delete_from_filter())
 
     def tearDown(self):
