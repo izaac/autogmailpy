@@ -223,7 +223,7 @@ class GmailInbox(HomePage):
 
     def _locate_email_counter_total(self, inbox=False):
         if inbox:
-            return self.find_by(By.XPATH, "//span[contains(@class, 'Dj')]/b[3]")
+            return self.find_by(By.CSS_SELECTOR, ".Dj>b:nth-of-type(3)")
         else:
             return self.find_by(By.XPATH, "/html/body/div[7]/div[3]/div/div[2]/div[1]/div[2]/div/div/div/div[1]/div[2]/"
                                           "div[1]/div[2]/div[1]/span/div[1]/span/b[3]")
