@@ -4,7 +4,7 @@ import datetime
 
 config = dict(
     email='nstest739@gmail.com',
-    passwd_key='some_passwd',
+    passwd_key='nstest739%',
 )
 
 

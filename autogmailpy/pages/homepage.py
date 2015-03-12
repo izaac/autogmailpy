@@ -1,5 +1,7 @@
 __author__ = 'Jorge'
 from selenium.webdriver.support import expected_conditions as EC
+import time
+
 
 class HomePage:
 
@@ -42,4 +44,8 @@ class HomePage:
 
     @staticmethod
     def wait_secs(driver, seconds):
-        driver.implicilty_wait(seconds)
+        driver.implicitly_wait(seconds)
+
+    @staticmethod
+    def force_wait(seconds):
+        time.sleep(seconds)

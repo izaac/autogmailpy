@@ -23,6 +23,7 @@ class TestGmailInbox(BaseTest):
         total_emails_before = self.gbox.get_current_total(inbox=True)
         self.gbox.compose()
         self.gbox.click_inbox_link()
+        self.gbox.force_wait(5)
         total_emails_after = self.gbox.get_current_total(inbox=True)
         self.assertLess(total_emails_before, total_emails_after)
 
