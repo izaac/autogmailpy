@@ -3,7 +3,7 @@ Python Selenium Gmail Tests
 
 ## Instructions
 Go to the tests folder and you'll have the following options:
-- **Install dependencies**: `pip install -r requirements.txt`
+- **Install dependencies**: `python setup.py install`
 - **Run with**: `python -m unittest name_of_test.py`
 - **Individual tests**: `python name_of_test.py Class.test_name`
 - **You can also run everything with nose**: `nosetests --with-xunit`
