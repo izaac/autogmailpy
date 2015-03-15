@@ -20,11 +20,11 @@ class TestGmailInbox(BaseTest):
     def test_compose_email(self):
 
         self.gbox.body = 'This is the Email Body'
-        total_emails_before = self.gbox.get_current_total(inbox=True)
+        total_emails_before = self.gbox.get_current_total()
         self.gbox.compose()
         self.gbox.click_inbox_link()
         self.gbox.force_wait(5)
-        total_emails_after = self.gbox.get_current_total(inbox=True)
+        total_emails_after = self.gbox.get_current_total()
         self.assertLess(total_emails_before, total_emails_after)
 
     @screenshot_on_error
