@@ -8,12 +8,11 @@ class GmailInbox(HomePage):
     selectors = dict(
         compose_button="//div[contains(text(),'COMPOSE')]",
         inbox_css="a[title|='Inbox']",
-        send="//div[text()='Send']",
         new_message="//div[contains(text(),'New Message')]",
-        recipient_tooltip="span[style='-webkit-user-select: none;']",
         to_text_field="textarea[aria-label='To'][name='to']",
         subject_text_field="input[placeholder='Subject'][aria-label='Subject'][name='subjectbox']",
         body_text_field="div[aria-label|='Message Body']",
+        send_button="div[aria-label~='Send']",
     )
 
     def __init__(self, driver):
@@ -36,6 +35,11 @@ class GmailInbox(HomePage):
         self.fill_in(self.By.CSS_SELECTOR, self.selectors['body_text_field'], body)
         self.force_wait(3)
         return self
+
+    def send_email(self):
+        self.click_element(self.find_by(self.By.CSS_SELECTOR, self.selectors['send_button']))
+        self.force_wait(3)
+        self
 
     def _locate_sent_message(self):
         return self.find_by(self.By.CLASS_NAME, 'vh')
