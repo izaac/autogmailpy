@@ -7,12 +7,14 @@ class GmailInbox(HomePage):
 
     selectors = dict(
         compose_button="//div[contains(text(),'COMPOSE')]",
-        inbox_css="a[title|='Inbox']",
+        inbox_css="a[title~='Inbox']",
         new_message="//div[contains(text(),'New Message')]",
         to_text_field="textarea[aria-label='To'][name='to']",
         subject_text_field="input[placeholder='Subject'][aria-label='Subject'][name='subjectbox']",
         body_text_field="div[aria-label|='Message Body']",
         send_button="div[aria-label~='Send']",
+        first_inbox_item="table tbody tr:first-child",
+        message_sent_alert="//div[contains(text(),'Your message has been sent.')]"
     )
 
     def __init__(self, driver):
@@ -38,24 +40,20 @@ class GmailInbox(HomePage):
 
     def send_email(self):
         self.click_element(self.find_by(self.By.CSS_SELECTOR, self.selectors['send_button']))
-        self.force_wait(3)
-        self
+        self.wait_for(self.find_by(self.By.XPATH, self.selectors['message_sent_alert']))
+        return self
 
-    def _locate_sent_message(self):
-        return self.find_by(self.By.CLASS_NAME, 'vh')
-
-    def _locate_compose_subject(self):
-        return self.find_by(self.By.CLASS_NAME, "aoT")
-
-    def _locate_compose_to(self):
-        return self.find_by(self.By.CLASS_NAME, "vO")
+    def validate_new_email(self):
+        self.click_element(self.find_by(self.By.CSS_SELECTOR, self.selectors['inbox_css']))
+        self.wait_for(self.find_by(self.By.CSS_SELECTOR, self.selectors['first_inbox_item']))
+        return self
 
     def _locate_test_link(self):
         return self.find_by(self.By.XPATH, "//a[contains(@title,'testx')]")
 
     def _locate_spam_link(self):
         return self.find_by(self.By.XPATH, "//a[contains(@title,'Spam')]")
-        # return self.find_by(self.By.CSS_SELECTOR, "css=a[title~='Spam']")
+        # return self.find_by(self.By.CSS_SELECTOR, "a[title~='Spam']")
 
     def _locate_no_spam(self):
         return self.find_by(self.By.XPATH, "//td[contains(text(), 'Hooray, no spam here!')]")
@@ -65,19 +63,6 @@ class GmailInbox(HomePage):
 
     def _locate_email_counter_total(self):
         return self.find_by(self.By.CSS_SELECTOR, ".Dj>b:nth-of-type(3)")
-
-    def _locate_compose_button(self):
-        return self.find_by(self.By.XPATH, "//div[contains(text(),'COMPOSE')]")
-
-    def _first_email_entry(self):
-        return self.find_by(self.By.XPATH, "//span[contains(@class, 'yP')]")
-        # return self.find_by(self.By.CSS_SELECTOR, "span[class~='yP']")
-
-    def _first_email_entry_title(self):
-        return self.find_by(self.By.XPATH, "//div[contains(@class, 'y6')]/descendant::span/b")
-
-    def _first_element_checkbox(self):
-        return self.find_by(self.By.XPATH, "//td[2]/div/div")
 
     def _locate_delforever_button(self):
         return self.find_by(self.By.XPATH, "//div[contains(text(),'Delete forever')]")
@@ -102,9 +87,6 @@ class GmailInbox(HomePage):
 
     def click_spam_link(self):
         self.click_element(self._locate_spam_link())
-
-    def click_compose_button(self):
-        self.click_element(self._locate_compose_button())
 
     def click_delete_forever_button(self):
         self.click_element(self._locate_delforever_button())
