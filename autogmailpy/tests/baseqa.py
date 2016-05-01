@@ -1,12 +1,11 @@
-__author__ = 'Jorge'
-
 import os
 import sys
 from unittest import TestCase
-
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
+
+__author__ = 'Jorge'
 
 bin_path = os.environ.get('BIN_PATH')
 

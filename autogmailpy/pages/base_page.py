@@ -1,13 +1,19 @@
-__author__ = 'Jorge'
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import NoSuchElementException
 import time
+
+__author__ = 'Jorge'
 
 
 class HomePage:
 
     def __init__(self, driver):
+        self.NoSuchElementException = NoSuchElementException
+        self.By = By
         self._driver = driver
-        self._wait = None
+        self._wait = WebDriverWait(driver, 10)
 
     def quit(self):
         self.driver.quit()
@@ -34,6 +40,12 @@ class HomePage:
     def find_by(self, *pars):
         return self.driver.find_element(*pars)
 
+    def have_content(self, content):
+        result = self.driver.find_elements_by_xpath("//*[contains(text(),'"+content+"')]")
+        if result:
+            return True
+        return False
+
     @staticmethod
     def click_element(elem):
         elem.click()
@@ -49,3 +61,7 @@ class HomePage:
     @staticmethod
     def force_wait(seconds):
         time.sleep(seconds)
+
+    def fill_in(self, by, selector, content):
+        element = self.find_by(by, selector)
+        element.send_keys(content)

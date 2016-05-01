@@ -1,9 +1,9 @@
-__author__ = 'Jorge'
-
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 import autogmailpy
 import uuid
+
+__author__ = 'Jorge'
 
 driver = webdriver.Firefox()
 gbox = autogmailpy.GmailInbox(driver)

@@ -1,7 +1,6 @@
 import unittest
-
-from autogmailpy.pages.gmail_login import GmailLogin
-from autogmailpy.helpers import *
+from autogmailpy.pages.gmail_login_page import GmailLogin
+from autogmailpy.helpers import screenshot_on_error
 from autogmailpy.tests.baseqa import BaseTest
 
 
@@ -14,18 +13,11 @@ class TestGmailLogin(BaseTest):
         self.glogin = GmailLogin(self.driver)
         self.glogin.wait = self.wait
 
-
-    @screenshot_on_error
-    def test_invalid_login(self):
-
-        self.glogin.driver.get(self.glogin.driver.base_url)
-        self.assertTrue(self.glogin.login_invalid())
-
     @screenshot_on_error
     def test_valid_login(self):
 
         self.glogin.driver.get(self.glogin.driver.base_url)
-        self.assertTrue(self.glogin.login_valid())
+        inbox = self.glogin.fill_in_email().click_next_button().fill_in_password().click_signin_button()
 
     def tearDown(self):
 

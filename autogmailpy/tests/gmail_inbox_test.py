@@ -2,7 +2,7 @@ import unittest
 import uuid
 
 from autogmailpy.helpers import *
-from autogmailpy.pages.gmail_inbox import GmailInbox
+from autogmailpy.pages.gmail_inbox_page import GmailInbox
 from autogmailpy.tests.baseqa import BaseTest
 
 
