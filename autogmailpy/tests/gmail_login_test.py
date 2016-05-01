@@ -18,7 +18,7 @@ class TestGmailLogin(BaseTest):
 
         self.glogin.driver.get(self.glogin.driver.base_url)
         inbox = self.glogin.fill_in_email().click_next_button().fill_in_password().click_signin_button()
-        inbox.click_compose()
+        inbox.click_compose().fill_email()
 
     def tearDown(self):
 

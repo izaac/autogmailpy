@@ -9,7 +9,11 @@ class GmailInbox(HomePage):
         compose_button="//div[contains(text(),'COMPOSE')]",
         inbox_css="a[title|='Inbox']",
         send="//div[text()='Send']",
-        new_message="//div[contains(text(),'New Message')]"
+        new_message="//div[contains(text(),'New Message')]",
+        recipient_tooltip="span[style='-webkit-user-select: none;']",
+        to_text_field="textarea[aria-label='To'][name='to']",
+        subject_text_field="input[placeholder='Subject'][aria-label='Subject'][name='subjectbox']",
+        body_text_field="div[aria-label|='Message Body']",
     )
 
     def __init__(self, driver):
@@ -24,6 +28,15 @@ class GmailInbox(HomePage):
         self.wait_for(self.find_by(self.By.XPATH, self.selectors['new_message']))
         return self
 
+    def fill_email(self, to=config['email'], subject='test', body='test'):
+        self.fill_in(self.By.CSS_SELECTOR, self.selectors['to_text_field'], to)
+        self.find_by(self.By.CSS_SELECTOR, self.selectors['to_text_field']).send_keys(self.Keys.TAB)
+        self.fill_in(self.By.CSS_SELECTOR, self.selectors['subject_text_field'], subject)
+        self.find_by(self.By.CSS_SELECTOR, self.selectors['subject_text_field']).send_keys(self.Keys.TAB)
+        self.fill_in(self.By.CSS_SELECTOR, self.selectors['body_text_field'], body)
+        self.force_wait(3)
+        return self
+
     def _locate_sent_message(self):
         return self.find_by(self.By.CLASS_NAME, 'vh')
 
@@ -32,18 +45,6 @@ class GmailInbox(HomePage):
 
     def _locate_compose_to(self):
         return self.find_by(self.By.CLASS_NAME, "vO")
-
-    def _locate_compose_body(self):
-        return self.find_by(self.By.XPATH, "//div[contains(@aria-label, 'Message Body')]")
-        # return self.find_by(self.By.CSS_SELECTOR, "css=div[aria-label~='Message Body']")
-
-    def _locate_inbox_link(self):
-        return self.find_by(self.By.XPATH, "//a[contains(@title,'Inbox')]")
-        # return self.find_by(self.By.CSS_SELECTOR, "a[title|='Inbox']")
-
-    def _locate_sent_link(self):
-        return self.find_by(self.By.XPATH, "//a[contains(@title,'Sent Mail')]")
-        # return self.find_by(self.By.CSS_SELECTOR, "css=a[title~='Sent Mail']")
 
     def _locate_test_link(self):
         return self.find_by(self.By.XPATH, "//a[contains(@title,'testx')]")
@@ -61,10 +62,6 @@ class GmailInbox(HomePage):
     def _locate_email_counter_total(self):
         return self.find_by(self.By.CSS_SELECTOR, ".Dj>b:nth-of-type(3)")
 
-    def _locate_email_counter_total_filter(self):
-        return self.find_by(self.By.XPATH, "/html/body/div[7]/div[3]/div/div[2]/div[1]/div[2]/div/div/div/div[1]/div[2]/"
-                                      "div[1]/div[2]/div[1]/span/div[1]/span/b[3]")
-
     def _locate_compose_button(self):
         return self.find_by(self.By.XPATH, "//div[contains(text(),'COMPOSE')]")
 
@@ -72,43 +69,17 @@ class GmailInbox(HomePage):
         return self.find_by(self.By.XPATH, "//span[contains(@class, 'yP')]")
         # return self.find_by(self.By.CSS_SELECTOR, "span[class~='yP']")
 
-    def _first_email_entry_content(self):
-        #return self.find_by(self.By.XPATH, "/html/body/div/div/div/div/div/div/div/div/div/div/div/"
-        #                              "div/div/div/div/div/div/table/tbody/tr/td/div/div/div/span[2]")
-        return self.find_by(self.By.CSS_SELECTOR, "html>body>div>div>div>div>div>div>div>div>div>div>div>"
-                            "div>div>div>div>div>div>table>tbody>tr>td>div>div>div>span:nth-of-type(2)")
-
     def _first_email_entry_title(self):
         return self.find_by(self.By.XPATH, "//div[contains(@class, 'y6')]/descendant::span/b")
 
     def _first_element_checkbox(self):
         return self.find_by(self.By.XPATH, "//td[2]/div/div")
 
-    def _first_element_checkbox_filter(self):
-        return self.find_by(self.By.XPATH, "/html/body/div[7]/div[3]/div/div[2]/div[1]/div[2]/div/div/div/div[2]/div[1]/"
-                                      "div[1]/div/div/div[5]/div[1]/div/table/tbody/tr[1]/td[2]/div")
-
     def _locate_delforever_button(self):
         return self.find_by(self.By.XPATH, "//div[contains(text(),'Delete forever')]")
 
-    def _locate_delete_button(self):
-        # return self.find_by(self.By.XPATH, "/html/body/div[7]/div[3]/div/div[2]/div[1]/div[2]/div/div/div/div[1]/div[2]/"
-        #                               "div[1]/div[1]/div/div/div[2]/div[3]")
-
-        return self.find_by(self.By.CSS_SELECTOR, "html>body>div:nth-of-type(7)>div:nth-of-type(3)>div>div:nth-of-type(2)>"
-                                             "div:nth-of-type(1)>div:nth-of-type(2)>div>div>div>div:nth-of-type(1)>"
-                                             "div:nth-of-type(2)>div:nth-of-type(1)>div:nth-of-type(1)>div>div>"
-                                             "div:nth-of-type(2)>div:nth-of-type(3)")
-
     def _locate_delforever_confirmation(self):
         return self.find_by(self.By.XPATH, "//div[contains(text(), 'The conversation has been deleted.')")
-
-    def _locate_delete_confirmation(self):
-        # return self.find_by(self.By.XPATH, "/html/body/div[7]/div[3]/div/div[1]/div[5]/div[1]/div[2]/div[3]/div/div/"
-        #                               "div[2]/span[1]")
-        return self.find_by(self.By.CSS_SELECTOR, "html>body>div:nth-of-type(7)>div:nth-of-type(3)>div>div:nth-of-type(1)>"
-                                             "div:nth-of-type(5)>div:nth-of-type(1)>div:nth-of-type(2)>"
-                                             "div:nth-of-type(3)>div>div>div:nth-of-type(2)>span:nth-of-type(1)")
 
     def _locate_more_less(self):
         return self.find_by(self.By.CLASS_NAME, "CJ")
@@ -125,23 +96,11 @@ class GmailInbox(HomePage):
     def wait_seconds(self, seconds):
         self.wait_secs(self.driver, seconds)
 
-    def click_inbox_link(self):
-        self.click_element(self._locate_inbox_link())
-
-    def click_sent_link(self):
-        self.click_element(self._locate_sent_link())
-
     def click_spam_link(self):
         self.click_element(self._locate_spam_link())
 
     def click_compose_button(self):
         self.click_element(self._locate_compose_button())
-
-    def click_send_button(self):
-        self.click_element(self._locate_send_button())
-
-    def click_delete_button(self):
-        self.click_element(self._locate_delete_button())
 
     def click_delete_forever_button(self):
         self.click_element(self._locate_delforever_button())
@@ -151,6 +110,3 @@ class GmailInbox(HomePage):
 
     def click_more_options(self):
         self.click_element(self._locate_more_options())
-
-    def get_first_element_text(self):
-        return self.get_text_from_element(self._first_email_entry_content())
