@@ -7,7 +7,9 @@ class GmailInbox(HomePage):
 
     selectors = dict(
         compose_button="//div[contains(text(),'COMPOSE')]",
-        inbox="//a[contains(@title,'Inbox')]"
+        inbox_css="a[title|='Inbox']",
+        send="//div[text()='Send']",
+        new_message="//div[contains(text(),'New Message')]"
     )
 
     def __init__(self, driver):
@@ -15,13 +17,12 @@ class GmailInbox(HomePage):
         self._body = ""
         self._subject = "Hi!"
         self.driver = driver
-        self.wait_for(self.find_by(self.By.XPATH, self.selectors['compose_button']))
+        self.wait_for(self.find_by(self.By.CSS_SELECTOR, self.selectors['inbox_css']))
 
-    def _compose_frame_visible(self):
-        self.find_by(self.By.XPATH, "//div[contains(text(),'COMPOSE')]")
-
-    def _locate_send_button(self):
-        return self.find_by(self.By.XPATH, "//div[text()='Send']")
+    def click_compose(self):
+        self.click_element(self.find_by(self.By.XPATH, self.selectors['compose_button']))
+        self.wait_for(self.find_by(self.By.XPATH, self.selectors['new_message']))
+        return self
 
     def _locate_sent_message(self):
         return self.find_by(self.By.CLASS_NAME, 'vh')
@@ -38,7 +39,7 @@ class GmailInbox(HomePage):
 
     def _locate_inbox_link(self):
         return self.find_by(self.By.XPATH, "//a[contains(@title,'Inbox')]")
-        # return self.find_by(self.By.CSS_SELECTOR, "css=a[title~='Inbox']")
+        # return self.find_by(self.By.CSS_SELECTOR, "a[title|='Inbox']")
 
     def _locate_sent_link(self):
         return self.find_by(self.By.XPATH, "//a[contains(@title,'Sent Mail')]")

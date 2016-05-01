@@ -4,7 +4,7 @@ import datetime
 
 config = dict(
     email=os.getenv('GMAIL_USER', 'nstest739@gmail.com'),
-    passwd_key="$*#K!rcbz75!hESV#Q#zurFwqkg49n" #os.getenv('GMAIL_PASSWD', 'passwd'),
+    passwd_key=os.getenv('GMAIL_PASSWD', 'passwd'),
 )
 
 

@@ -21,7 +21,7 @@ class TestGmailInbox(BaseTest):
 
         self.gbox.body = 'This is the Email Body'
         total_emails_before = self.gbox.get_current_total()
-        self.gbox.compose()
+        self.gbox.click_compose()
         self.gbox.click_inbox_link()
         self.gbox.force_wait(5)
         total_emails_after = self.gbox.get_current_total()
@@ -31,7 +31,7 @@ class TestGmailInbox(BaseTest):
     def test_validate_sent_item(self):
 
         self.gbox.body = '{0}'.format(uuid.uuid4())
-        self.gbox.compose()
+        self.gbox.click_compose()
         self.gbox.check_in_sent()
         self.gbox.wait_for(self.gbox._first_email_entry_content())
         first_sent_entry = self.gbox.get_first_element_text()
@@ -54,7 +54,7 @@ class TestGmailInbox(BaseTest):
         uuid_gen = uuid.uuid4()
         self.gbox.body = '{0}'.format(uuid_gen)
         self.gbox.subject = '[test] {0}'.format(uuid_gen)
-        self.gbox.compose()
+        self.gbox.click_compose()
         self.assertTrue(self.gbox.delete_from_filter())
 
     def tearDown(self):

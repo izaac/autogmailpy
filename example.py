@@ -12,6 +12,6 @@ driver.implicitly_wait(5)
 gbox.wait = wait
 gbox.go_inbox()
 gbox.body = '{0}'.format(uuid.uuid4())
-gbox.compose()
+gbox.click_compose()
 gbox.check_in_sent()
 gbox.quit()
