@@ -9,9 +9,7 @@ class TestGmailLogin(BaseTest):
     def setUp(self):
 
         super(TestGmailLogin, self).setUp()
-        self.driver.implicitly_wait(5)
         self.glogin = GmailLogin(self.driver)
-        self.glogin.wait = self.wait
 
     @screenshot_on_error
     def test_valid_login(self):

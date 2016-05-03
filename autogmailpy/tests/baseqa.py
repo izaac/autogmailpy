@@ -25,3 +25,4 @@ class BaseTest(TestCase):
 
         self.driver.maximize_window()
         self.wait = WebDriverWait(self.driver, timeout=60)
+        self.driver.implicitly_wait(10)

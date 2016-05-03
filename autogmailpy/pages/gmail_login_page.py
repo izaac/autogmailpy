@@ -20,6 +20,9 @@ class GmailLogin(HomePage):
         self.passwd = None
         self.driver.base_url = 'https://gmail.com'
 
+    def visit_login(self):
+        self.driver.get(self.driver.base_url)
+
     def click_next_button(self):
         next_button = self.find_by(self.By.ID, self.selectors['next_button'])
         self.click_element(next_button)

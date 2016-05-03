@@ -17,6 +17,7 @@ class HomePage:
         self.Keys = Keys
         self.ActionChains = ActionChains
         self._driver = driver
+        self._driver.implicitly_wait(10)
         self._wait = WebDriverWait(driver, 10)
 
     def quit(self):

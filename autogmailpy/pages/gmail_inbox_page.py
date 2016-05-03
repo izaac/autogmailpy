@@ -53,7 +53,6 @@ class GmailInbox(HomePage):
 
     def _locate_spam_link(self):
         return self.find_by(self.By.XPATH, "//a[contains(@title,'Spam')]")
-        # return self.find_by(self.By.CSS_SELECTOR, "a[title~='Spam']")
 
     def _locate_no_spam(self):
         return self.find_by(self.By.XPATH, "//td[contains(text(), 'Hooray, no spam here!')]")
@@ -81,9 +80,6 @@ class GmailInbox(HomePage):
 
     def _locate_bad_spelled(self):
         self.find_by(self.By.XPATH, "//span[@data-g-spell-status]")
-
-    def wait_seconds(self, seconds):
-        self.wait_secs(self.driver, seconds)
 
     def click_spam_link(self):
         self.click_element(self._locate_spam_link())
