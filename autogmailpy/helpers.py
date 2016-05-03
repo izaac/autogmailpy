@@ -2,10 +2,9 @@ import os
 from functools import wraps
 import datetime
 
-# TODO: I need to set passwd_key to get value from an Environment variable to get the password dynamically.
 config = dict(
-    email='nstest739@gmail.com',
-    passwd_key='password',
+    email=os.getenv('GMAIL_USER', 'nstest739@gmail.com'),
+    passwd_key=os.getenv('GMAIL_PASSWD', 'passwd'),
 )
 
 

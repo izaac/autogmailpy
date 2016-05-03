@@ -1,17 +1,13 @@
-__author__ = 'Jorge'
-
 from selenium import webdriver
-from selenium.webdriver.support.ui import WebDriverWait
 import autogmailpy
 import uuid
 
+__author__ = 'Jorge'
+
 driver = webdriver.Firefox()
-gbox = autogmailpy.GmailInbox(driver)
-wait = WebDriverWait(driver, timeout=60)
-driver.implicitly_wait(5)
-gbox.wait = wait
-gbox.go_inbox()
-gbox.body = '{0}'.format(uuid.uuid4())
-gbox.compose()
-gbox.check_in_sent()
-gbox.quit()
+glogin = autogmailpy.GmailLogin(driver)
+glogin.visit_login()
+inbox = glogin.fill_in_email().click_next_button().fill_in_password().click_signin_button()
+body = '{0}'.format(uuid.uuid4())
+inbox.click_compose().fill_email(body=body).send_email().validate_new_email()
+inbox.quit()
